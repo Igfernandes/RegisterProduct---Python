@@ -10,7 +10,7 @@ class mainBD:
     def __init__(self, win):
         self.objBD = crud.AppBD()
         #componentes
-        self.lbCodigo = tk.Label(win, text="Código do produto: ")
+        self.lbCodigo = tk.Label(win, text="Nome do produto: ")
         self.lbNome = tk.Label(win, text="Código do Produto:")
         self.lblPreco = tk.Label(win, text="Preço")
 
@@ -19,8 +19,8 @@ class mainBD:
         self.txtPreco = tk.Entry()
 
         self.btnCadastrar = tk.Button(win, text="Cadastrar", command=self.fCadastroProducT)
-        self.btnAtualizar = tk.Button(win, text="Atualizar")
-        self.btnExcluir = tk.Button(win, text="Excluir")
+        self.btnAtualizar = tk.Button(win, text="Atualizar", command=self.fAtualizarProduto)
+        self.btnExcluir = tk.Button(win, text="Excluir", command=self.fExcluirProduto)
         self.btnLimpar = tk.Button(win, text="Limpar", command=self.fLimparTela)
 
         self.lbCodigo.place(x=100,y=50)
@@ -56,6 +56,24 @@ class mainBD:
         except:
             print("Não foi possível fazer o cadastro")
 
+
+    def fAtualizarProduto(self):
+        try:
+            codigo, nome, preco = self.flerCampos()
+            self.objBD.atualizarDados(codigo, nome, preco)
+            self.fLimparTela()
+            print("Produto Atualizado com Sucesso!")
+        except:
+            print("Não foi possível fazer a atualização.")
+
+    def fExcluirProduto(self):
+        try:
+            codigo, nome, preco = self.flerCampos()
+            self.objBD.excluirDados(codigo)
+            self.fLimparTela()
+            print('Produto Excluído com Sucesso!')
+        except:
+            print('Não foi possível fazer a exclusão do produto.')
 
     def fLimparTela(self):
         try:

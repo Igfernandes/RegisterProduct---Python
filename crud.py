@@ -43,3 +43,42 @@ class AppBD:
                 cursor.close()
                 self.connection.close()
                 print("A conexão com o postgreSQL foi fechada.")
+
+    def atualizarDados(self, codigo, nome, preco):
+        try:
+            self.abrirConexao()
+            cursor = self.connection.cursor()
+            sql_update_query = """Update public."PRODUTO" set "NOME"=%s, "PRECO"=%s where "CODIGO"=%s"""
+            cursor.execute(sql_update_query, (nome, preco, codigo))
+            self.connection.commit()
+            count = cursor.rowcount
+            print(count, "Registro atualizado com sucesso!")
+            print("Registro Depois da Atualização")
+            sql_select_query = """select * from public."PRODUTO" where "CODIGO"=%s """
+            cursor.execute(sql_select_query, (codigo,))
+            record = cursor.fetchone()
+            print(record)
+        except(Exception, psycopg2.Error) as error:
+            print("Erro na Atualização", error)
+        finally:
+            if (self.connection):
+                cursor.close()
+                self.connection.close()
+                print("A conexão com o PostgreSQL foi fechada.")
+
+    def excluirDados(self, codigo):
+        try:
+            self.abrirConexao()
+            cursor = self.connection.cursor()
+            sql_delete_query = """Delete from public."PRODUTO" where "CODIGO"=%s"""
+            cursor.execute(sql_delete_query, (codigo,))
+            self.connection.commit()
+            count = cursor.rowcount
+            print(count, "Registro excluído com sucesso!")
+        except(Exception, psycopg2.Error) as error:
+            print("Erro na Exclusão", error)
+        finally:  # closing database connection.
+            if(self.connection):
+                cursor.close()
+                self.connection.close()
+                print("A conexão com o PostgreSQL foi fechada.")
